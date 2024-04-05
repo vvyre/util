@@ -1,0 +1,14 @@
+node_modules
+.pnp
+.pnp.js
+coverage
+.next
+dist
+out
+build
+.DS_Store
+*.pem
+npm-debug.log*
+.pnpm-debug.log*
+.env
+*.tsbuildinfo
