@@ -54,28 +54,31 @@ export const useForm = <T extends Object>({
   ) => handleInput(e.target)
 
   const refInputNamesType = [...refInputNames] as const
-  const [currRefValues, refs] = useRefInputInit<T>(refInputNamesType)
+  const [currRefValues, refs] = useRefInputInit<T>(refInputNamesType, values)
   const convertedRefValues =
     typeof currRefValues === 'function' ? currRefValues() : currRefValues
 
-  const submit = () => {
-    setIsLoading(true)
-    if (typeof validator === 'function')
-      setValid(validator({ ...values, ...convertedRefValues }))
-  }
+  const submit = () => setIsLoading(true)
 
   useEffect(() => {
-    isLoading &&
-      (async () => {
-        if (valid) {
-          if (!refInputNames) setValues({ ...values })
-          else cumpulsorySetValue({ ...values, ...convertedRefValues })
-          const res = await onSubmit(values)
-          setResponse(res)
-          setIsLoading(false)
-        }
-      })()
-  }, [valid])
+    if (isLoading) {
+      if (!refInputNames) setValues({ ...values })
+      else cumpulsorySetValue({ ...values, ...convertedRefValues })
+
+      if (typeof validator === 'function') {
+        const isValid = validator({ ...values, ...convertedRefValues })
+        setValid(isValid)
+      }
+    }
+
+    if (isLoading && valid) POST()
+
+    async function POST() {
+      const res = await onSubmit(values)
+      setResponse(res)
+      setIsLoading(false)
+    }
+  }, [isLoading, valid])
 
   const data = {
     values,
@@ -106,7 +109,8 @@ export const useForm = <T extends Object>({
 }
 
 function useRefInputInit<T>(
-  refInputNames: readonly (keyof T)[] = []
+  refInputNames: readonly (keyof T)[] = [],
+  values: T
 ): [
   () => Record<(typeof refInputNames)[number], any>,
   Record<(typeof refInputNames)[number], RefObject<HTMLInputElement>>
@@ -121,8 +125,10 @@ function useRefInputInit<T>(
   refInputNames.forEach(k => (refs[k] = useRef<HTMLInputElement>(null)))
 
   const currRefValues: () => RefValues = () => {
-    const refValues: RefValues = {} as RefValues
-    refInputNames.forEach(k => (refValues[k] = refs[k]?.current?.value || ''))
+    const refValues: RefValues = values
+    refInputNames.forEach(
+      k => (refValues[k] = refs[k]?.current?.value || values[k])
+    )
     return refValues
   }
 

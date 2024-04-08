@@ -3,15 +3,15 @@ import type { Dispatch, SetStateAction, ChangeEvent, RefObject } from 'react'
 export interface UseForm<T extends Object> {
   values: T
   setValues: Dispatch<SetStateAction<T>>
-  refValues?: Record<keyof T, any> | null
+  refValues: Record<keyof T, any> | null
   handleChange: (
     e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>
   ) => Promise<void>
-  valid?: boolean
-  refs?: Record<keyof T, RefObject<HTMLInputElement>> | null
+  valid: boolean
+  refs: Record<keyof T, RefObject<HTMLInputElement>> | null
   submit: (data: any) => any
-  isLoading?: boolean
-  response?: unknown
+  isLoading: boolean
+  response: unknown
 }
 
 export interface UseFormArgs<T extends Object> {
