@@ -1,61 +1,18 @@
 import React from 'react'
-import { render, renderHook, act, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, renderHook, screen, act, fireEvent, waitFor } from '@testing-library/react'
 import { useForm } from '../../use-form/src'
-
-// import nock from 'nock'
-// import axios from 'axios'
+import { User, useUserStore } from './__mocks__/store'
 
 describe('Hook Initialization', () => {
-  beforeAll(() => {
-    console.error = jest.fn()
-  })
-  afterAll(() => {
-    console.error = console.error
-  })
   it('should correctly set initial values ', () => {
-    const initialValues = {
-      name: 'abcd',
-      email: 'abcd@abcd.com'
-    }
-    const onSubmit = jest.fn()
-    const { result } = renderHook(() =>
-      useForm({
-        initialValues,
-        onSubmit
-      })
-    )
-
-    expect(result.current.values).toEqual(initialValues)
-  })
-
-  it('should correctly update values with setValues', () => {
-    const initialValues = {
-      name: 'abcd',
-      email: 'abcd@abcd.com'
-    }
-    const onSubmit = jest.fn()
-    const { result } = renderHook(() =>
-      useForm({
-        initialValues,
-        onSubmit
-      })
-    )
-
-    expect(result.current.values).toEqual(initialValues)
-
-    act(() => result.current.setValues({ name: 'b', email: 'zxcv@zxcv.com' }))
-    expect(result.current.values).not.toEqual(initialValues)
-    expect(result.current.values).toEqual({ name: 'b', email: 'zxcv@zxcv.com' })
-  })
-
-  it('should call console.error when the updateStore is not a function', () => {
-    const initialValues = {
-      name: 'abcd',
-      email: 'abcd@abcd.com'
+    const initialValues: User = {
+      email: 'abcd@abcd.com',
+      password: 'abcd'
     }
     const onSubmit = jest.fn()
 
-    const updateStore = null as unknown as () => {}
+    const { result } = renderHook(() => useUserStore())
+    const { updateStore } = result.current
 
     renderHook(() =>
       useForm({
@@ -65,34 +22,56 @@ describe('Hook Initialization', () => {
       })
     )
 
-    expect(console.error).toHaveBeenCalledWith('<!> useForm: updateStore should be a function')
+    expect(result.current.values).toEqual(initialValues)
+  })
+
+  it('should correctly update values with setValues', async () => {
+    const initialValues: User = {
+      email: 'abcd@abcd.com',
+      password: 'abcd'
+    }
+    const onSubmit = jest.fn()
+    const { result } = renderHook(() => useUserStore())
+    const { updateStore } = result.current
+
+    renderHook(() =>
+      useForm({
+        initialValues,
+        onSubmit,
+        updateStore
+      })
+    )
+    expect(result.current.values).toEqual(initialValues)
+
+    act(() => result.current.setValues({ email: 'zxcv@zxcv.com', password: 'b' }))
+
+    await waitFor(() => {
+      expect(result.current.values).toEqual({ email: 'zxcv@zxcv.com', password: 'b' })
+    })
   })
 })
 
 describe('Component Bindings', () => {
   it('should correctly track changes to input values', () => {
     const initialValues = {
-      name: 'name',
       email: 'abcd@email.com',
-      coffee: true
+      password: '12345'
     }
     const onSubmit = jest.fn()
 
-    const { result } = renderHook(() =>
+    const { result } = renderHook(() => useUserStore())
+    const { updateStore } = result.current
+
+    renderHook(() =>
       useForm<typeof initialValues>({
         initialValues,
-        onSubmit
+        onSubmit,
+        updateStore
       })
     )
+
     render(
       <form onSubmit={result.current.submit}>
-        <input
-          placeholder="name"
-          type="text"
-          name="name"
-          value={result.current.values.name}
-          onChange={result.current.handleChange}
-        />
         <input
           placeholder="email"
           type="text"
@@ -101,63 +80,76 @@ describe('Component Bindings', () => {
           onChange={result.current.handleChange}
         />
         <input
-          placeholder="coffee"
-          type="checkbox"
-          name="coffee"
-          checked={result.current.values.coffee}
+          placeholder="password"
+          type="text"
+          name="password"
+          value={result.current.values.password}
           onChange={result.current.handleChange}
         />
-        <button type="submit">Submit</button>
+        <button type="submit">Login</button>
       </form>
     )
 
-    const nameInput = screen.getByPlaceholderText('name')
     const emailInput = screen.getByPlaceholderText('email')
+    const passwordInput = screen.getByPlaceholderText('password')
 
-    expect(result.current.values.name).toBe('name')
     expect(result.current.values.email).toBe('abcd@email.com')
+    expect(result.current.values.password).toBe('12345')
 
-    fireEvent.change(nameInput, { target: { value: 'hello' } })
-    expect(result.current.values.name).toBe('hello')
+    fireEvent.change(emailInput, { target: { value: 'hello@hello.com' } })
+    expect(result.current.values.email).toBe('hello@hello.com')
 
-    fireEvent.change(emailInput, { target: { value: 'changed@changed.com' } })
-    expect(result.current.values.email).toBe('changed@changed.com')
+    fireEvent.change(passwordInput, { target: { value: '98765' } })
+    expect(result.current.values.password).toBe('98765')
   })
 
   it('should correctly track values of uncontrolled inputs', () => {
     const initialValues = {
-      nickname: 'latte'
+      email: 'latte@coffee.com',
+      password: 'decaf'
     }
-    const refInputNames: (keyof typeof initialValues)[] = ['nickname']
+    const refInputNames: (keyof typeof initialValues)[] = ['password']
     const onSubmit = jest.fn()
 
-    const { result } = renderHook(() =>
+    const { result } = renderHook(() => useUserStore())
+    const { updateStore } = result.current
+
+    renderHook(() =>
       useForm<typeof initialValues>({
         initialValues,
         onSubmit,
-        refInputNames
+        refInputNames,
+        updateStore
       })
     )
+
     render(
       <form onSubmit={result.current.submit}>
         <input
-          placeholder="nickname"
+          placeholder="email"
           type="text"
-          name="nickname"
-          ref={result.current.refs?.nickname}
-          value={result.current.refs?.nickname.current?.value}
+          name="email"
+          value={result.current.values.email}
           onChange={result.current.handleChange}
         />
-        <button type="submit">Submit</button>
+        <input
+          placeholder="password"
+          type="text"
+          name="password"
+          ref={result.current.refs?.password}
+          value={result.current.refs?.password.current?.value}
+          onChange={result.current.handleChange}
+        />
+        <button type="submit">Login</button>
       </form>
     )
 
-    const refInput = screen.getByPlaceholderText('nickname')
-
-    expect(result.current.values.nickname).toBe('latte')
+    const refInput = screen.getByPlaceholderText('password')
+    expect(result.current.values.password).toBe('decaf')
 
     fireEvent.change(refInput, { target: { value: 'brewcoldblue' } })
-    expect(result.current.values.nickname).toBe('brewcoldblue')
+
+    expect(result.current.values.password).toBe('brewcoldblue')
   })
 })
 
@@ -193,11 +185,15 @@ describe('Form Submission', () => {
       else return false
     }
 
-    const { result } = renderHook(() =>
+    const { result } = renderHook(() => useUserStore())
+    const { updateStore } = result.current
+
+    renderHook(() =>
       useForm<typeof initialValues>({
         initialValues,
         onSubmit,
-        validator
+        validator,
+        updateStore
       })
     )
 
@@ -230,6 +226,7 @@ describe('Form Submission', () => {
     fireEvent.change(passwordInput, { target: { value: 'asdqwe123' } })
     fireEvent.submit(testform)
 
+    console.log(result.current)
     await waitFor(() => {
       expect(result.current.valid).toBe(true)
       expect(onSubmit).toHaveBeenCalled()

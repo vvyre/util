@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ChangeEvent, RefObject } from 'react'
 import type { UseForm, UseFormArgs } from './types'
 
@@ -7,83 +7,59 @@ export const useForm = <T extends Object>({
   onSubmit,
   validator,
   refInputNames = [],
-  setExternalStoreValues = undefined,
-  setExternalStoreData = undefined
+  updateStore = undefined
 }: UseFormArgs<T>): UseForm<T> => {
-  const [values, setValues] = useState<typeof initialValues>({
-    ...initialValues
-  } as const)
+  const [values, setValues] = useState<typeof initialValues>(initialValues)
   const [valid, setValid] = useState<boolean>(true)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [response, setResponse] = useState<unknown>(null)
 
-  const handleInput = (
-    t: EventTarget & HTMLInputElement & HTMLTextAreaElement
-  ) => {
-    if (
-      typeof setExternalStoreValues !== 'function' &&
-      typeof setExternalStoreData !== 'undefined'
-    ) {
-      console.error('<!> useForm: setExternalStoreValues should be a function')
-    }
-
-    const checkbox = t.type === 'checkbox'
-    if (checkbox) setValues(prevData => ({ ...prevData, [t.name]: t.checked }))
-    else setValues(prevData => ({ ...prevData, [t.name]: t.value }))
-
-    //TODO: how to assure type here?
-    if (typeof setExternalStoreValues === 'function')
-      setExternalStoreValues({
-        [t.name]: checkbox ? t.checked : t.value
-      } as Partial<T>)
-  }
-
   const cumpulsorySetValue = (data: T) => {
-    if (
-      typeof setExternalStoreValues !== 'function' &&
-      typeof setExternalStoreData !== 'undefined'
-    )
-      console.error('<!> useForm: setExternalStoreValues should be a function')
-    typeof setExternalStoreValues === 'function'
-      ? setExternalStoreValues(data)
-      : setValues(data)
+    typeof updateStore === 'function' ? updateStore({ values: data }) : setValues(data)
   }
 
-  const handleChange = async (
-    e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>
-  ) => handleInput(e.target)
+  const handleChange = async (e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>) => {
+    const t = e.target
+    const checkbox = t.type === 'checkbox'
+    if (typeof updateStore === 'function') {
+      updateStore({
+        values: {
+          ...values,
+          [t.name]: checkbox ? t.checked : t.value
+        }
+      })
+    }
+    setValues(prevData => ({ ...prevData, [t.name]: checkbox ? t.checked : t.value }))
+  }
 
-  const refInputNamesType = [...refInputNames] as const
-  const [currRefValues, refs] = useRefInputInit<T>(refInputNamesType, values)
-  const convertedRefValues =
-    typeof currRefValues === 'function' ? currRefValues() : currRefValues
+  const readonlyRefInputNames = [...refInputNames] as const
+  const [currRefValues, refs] = useRefInputInit<T>(readonlyRefInputNames, values)
+
+  const mergeValues = (values: T, convertedRefValues: Record<keyof T, any>) => {
+    if (!refInputNames) setValues({ ...values })
+    else cumpulsorySetValue({ ...values, ...convertedRefValues })
+  }
 
   const submit = () => setIsLoading(true)
 
   useEffect(() => {
-    if (isLoading) {
-      if (!refInputNames) setValues({ ...values })
-      else cumpulsorySetValue({ ...values, ...convertedRefValues })
+    if (isLoading) mergeValues(values, currRefValues)
+    setValid(typeof validator === 'function' ? validator(values) : true)
+  }, [isLoading])
 
-      if (typeof validator === 'function') {
-        const isValid = validator({ ...values, ...convertedRefValues })
-        setValid(isValid)
-      }
-    }
-
-    if (isLoading && valid) POST()
-
+  useEffect(() => {
     async function POST() {
       const res = await onSubmit(values)
       setResponse(res)
       setIsLoading(false)
     }
+
+    if (valid) POST()
   }, [isLoading, valid])
 
   const data = {
     values,
-    setValues,
-    refValues: convertedRefValues,
+    setValues: cumpulsorySetValue,
     handleChange,
     valid,
     refs,
@@ -93,17 +69,14 @@ export const useForm = <T extends Object>({
   }
 
   const updateExternalStore = () => {
-    if (
-      typeof setExternalStoreData !== 'function' &&
-      typeof setExternalStoreData !== 'undefined'
-    )
-      console.error('<!> useForm: setExternalStoreData should be a function')
-    typeof setExternalStoreData === 'function' && setExternalStoreData(data)
+    if (typeof updateStore !== 'function' && typeof updateStore !== 'undefined')
+      console.error('<!> useForm: updateStore should be a function')
+    typeof updateStore === 'function' && updateStore(data)
   }
 
   useEffect(() => {
     updateExternalStore()
-  }, [setExternalStoreData])
+  }, [setValues, handleChange, refs, submit, response, updateStore])
 
   return data
 }
@@ -112,25 +85,20 @@ function useRefInputInit<T>(
   refInputNames: readonly (keyof T)[] = [],
   values: T
 ): [
-  () => Record<(typeof refInputNames)[number], any>,
+  Record<(typeof refInputNames)[number], any>,
   Record<(typeof refInputNames)[number], RefObject<HTMLInputElement>>
 ] {
-  type Refs = Record<
-    (typeof refInputNames)[number],
-    RefObject<HTMLInputElement>
-  >
+  type Refs = Record<(typeof refInputNames)[number], RefObject<HTMLInputElement>>
   type RefValues = Record<(typeof refInputNames)[number], any>
 
   const refs: Refs = {} as Refs
   refInputNames.forEach(k => (refs[k] = useRef<HTMLInputElement>(null)))
 
-  const currRefValues: () => RefValues = () => {
+  const currRefValues: RefValues = useMemo(() => {
     const refValues: RefValues = values
-    refInputNames.forEach(
-      k => (refValues[k] = refs[k]?.current?.value || values[k])
-    )
+    refInputNames.forEach(k => (refValues[k] = refs[k]?.current?.value || values[k]))
     return refValues
-  }
+  }, [refInputNames])
 
   return [currRefValues, refs]
 }

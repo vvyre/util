@@ -1,15 +1,12 @@
-import type { Dispatch, SetStateAction, ChangeEvent, RefObject } from 'react'
+import type { ChangeEvent, RefObject } from 'react'
 
 export interface UseForm<T extends Object> {
   values: T
-  setValues: Dispatch<SetStateAction<T>>
-  refValues: Record<keyof T, any> | null
-  handleChange: (
-    e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>
-  ) => Promise<void>
+  setValues: (data: T) => void
+  handleChange: (e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>) => Promise<void>
   valid: boolean
   refs: Record<keyof T, RefObject<HTMLInputElement>> | null
-  submit: (data: any) => any
+  submit: (data: any) => void
   isLoading: boolean
   response: unknown
 }
@@ -19,6 +16,5 @@ export interface UseFormArgs<T extends Object> {
   onSubmit: (data: T) => any
   validator?: (data: T) => boolean
   refInputNames?: (keyof T)[]
-  setExternalStoreValues?: (input: Partial<T>) => void
-  setExternalStoreData?: (data: UseForm<T>) => void
+  updateStore?: (data: Partial<UseForm<T>>) => void
 }
