@@ -1,8 +1,8 @@
 {
-  "name": "sy-blocks",
+  "name": "@sy/react-util-hooks",
   "version": "1.0.0",
   "description": "practices",
-  "repository": "https://github.com/brewcoldblue/blocks",
+  "repository": "https://github.com/brewcoldblue/react-util-hooks",
   "keywords": [
     "typescript",
     "react",
@@ -11,7 +11,8 @@
   ],
   "scripts": {
     "test": "pnpx jest --watchAll --verbose",
-    "build": "tsc && pnpm bunchee --cwd use-form"
+    "build": "tsc && pnpm bunchee --cwd use-form",
+    "publish": "npm publish --access=public"
   },
   "exports": {
     "./package.json": "./package.json",
