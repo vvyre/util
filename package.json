@@ -1,5 +1,5 @@
 {
-  "name": "@sy/blocks",
+  "name": "sy-blocks",
   "version": "1.0.0",
   "description": "practices",
   "repository": "https://github.com/brewcoldblue/blocks",
@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "test": "pnpx jest --watchAll --verbose",
-    "build": "pnpm bunchee --cwd use-form"
+    "build": "tsc && pnpm bunchee --cwd use-form"
   },
   "exports": {
     "./package.json": "./package.json",

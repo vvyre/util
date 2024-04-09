@@ -1,19 +1,17 @@
 {
-  "name": "use-form",
   "scripts": {
     "build": "bunchee"
   },
-  "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     "import": {
-      "types": "./use-form/dist/index.d.mts",
-      "default": "./use-form/dist/index.mjs"
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
     },
     "require": {
-      "types": "./use-form/dist/index.d.ts",
-      "default": "./use-form/dist/index.js"
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     }
   },
   "peerDependencies": {
