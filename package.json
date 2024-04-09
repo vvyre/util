@@ -1,9 +1,10 @@
 {
-  "name": "react-util-hooks",
+  "name": "@sy/blocks",
   "version": "1.0.0",
-  "description": "utility hooks for react",
-  "repository": "https://github.com/brewcoldblue/react-util-hooks",
+  "description": "practices",
+  "repository": "https://github.com/brewcoldblue/blocks",
   "keywords": [
+    "typescript",
     "react",
     "custom hooks",
     "hooks"
