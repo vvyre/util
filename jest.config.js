@@ -12,6 +12,5 @@ module.exports = {
     '^.+\\.(t|j)sx?$': ['@swc/jest']
   },
   coveragePathIgnorePatterns: ['/node_modules/', '/dist/', '/test/'],
-  coverageReporters: ['text', 'html'],
-  reporters: [['github-actions', { silent: false }], 'summary']
+  coverageReporters: ['text', 'html']
 }
