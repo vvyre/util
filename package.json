@@ -1,9 +1,10 @@
 {
-  "name": "@sy/react-util-hooks",
+  "name": "@brewcold/util",
   "version": "1.0.0",
-  "description": "practices",
-  "repository": "https://github.com/brewcoldblue/react-util-hooks",
+  "description": "Javascript/Typescript util library for practice",
+  "repository": "https://github.com/brewcoldblue/util",
   "keywords": [
+    "javascript",
     "typescript",
     "react",
     "custom hooks",
@@ -11,24 +12,24 @@
   ],
   "scripts": {
     "test": "pnpx jest --watchAll --verbose",
-    "build": "tsc && pnpm bunchee --cwd use-form",
+    "build": "tsc && pnpm bunchee --cwd react",
     "publish": "npm publish --access=public"
   },
   "exports": {
     "./package.json": "./package.json",
-    "./use-form": {
+    "./react": {
       "import": {
-        "types": "./use-form/dist/index.d.mts",
-        "default": "./use-form/dist/index.mjs"
+        "types": "./react/dist/index.d.mts",
+        "default": "./react/dist/index.mjs"
       },
       "require": {
-        "types": "./use-form/dist/index.d.ts",
-        "default": "./use-form/dist/index.js"
+        "types": "./react/dist/index.d.ts",
+        "default": "./react/dist/index.js"
       }
     }
   },
   "files": [
-    "use-form/dist/**/*.{js,d.ts,mjs,d.mts}"
+    "react/dist/**/*.{js,d.ts,mjs,d.mts}"
   ],
   "author": "Seungyoon Yu",
   "license": "MIT",

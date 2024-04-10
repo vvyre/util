@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, renderHook, screen, act, fireEvent, waitFor } from '@testing-library/react'
-import { useForm } from '../../use-form/src'
 import { User, useUserStore } from './__mocks__/store'
+import { useForm } from '../../react/src/use-form'
 
 describe('Hook Initialization', () => {
   it('should correctly set initial values ', () => {
