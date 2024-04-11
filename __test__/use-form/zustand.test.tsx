@@ -226,7 +226,6 @@ describe('Form Submission', () => {
     fireEvent.change(passwordInput, { target: { value: 'asdqwe123' } })
     fireEvent.submit(testform)
 
-    console.log(result.current)
     await waitFor(() => {
       expect(result.current.valid).toBe(true)
       expect(onSubmit).toHaveBeenCalled()
