@@ -76,7 +76,7 @@ export const useForm = <T extends Object>({
 
   useEffect(() => {
     updateExternalStore()
-  }, [setValues, handleChange, refs, submit, response, updateStore])
+  }, [setValues, handleChange, valid, refs, submit, isLoading, response, updateStore])
 
   return data
 }
@@ -86,13 +86,16 @@ function useRefInputInit<T>(
   values: T
 ): [
   Record<(typeof refInputNames)[number], any>,
-  Record<(typeof refInputNames)[number], RefObject<HTMLInputElement>>
+  Record<(typeof refInputNames)[number], RefObject<HTMLInputElement & HTMLTextAreaElement>>
 ] {
-  type Refs = Record<(typeof refInputNames)[number], RefObject<HTMLInputElement>>
+  type Refs = Record<
+    (typeof refInputNames)[number],
+    RefObject<HTMLInputElement & HTMLTextAreaElement>
+  >
   type RefValues = Record<(typeof refInputNames)[number], any>
 
   const refs: Refs = {} as Refs
-  refInputNames.forEach(k => (refs[k] = useRef<HTMLInputElement>(null)))
+  refInputNames.forEach(k => (refs[k] = useRef<HTMLInputElement & HTMLTextAreaElement>(null)))
 
   const currRefValues: RefValues = useMemo(() => {
     const refValues: RefValues = values
