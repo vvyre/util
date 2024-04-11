@@ -54,7 +54,7 @@ export const useForm = <T extends Object>({
       setIsLoading(false)
     }
 
-    if (valid) POST()
+    if (isLoading && valid) POST()
   }, [isLoading, valid])
 
   const data = {
