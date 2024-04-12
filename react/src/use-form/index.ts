@@ -15,7 +15,8 @@ export const useForm = <T extends Object>({
   const [response, setResponse] = useState<unknown>(null)
 
   const cumpulsorySetValue = (data: T) => {
-    typeof updateStore === 'function' ? updateStore({ values: data }) : setValues(data)
+    typeof updateStore === 'function' && updateStore({ values: data })
+    setValues(data)
   }
 
   const handleChange = async (e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>) => {
