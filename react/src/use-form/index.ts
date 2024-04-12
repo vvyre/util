@@ -33,8 +33,7 @@ export const useForm = <T extends Object>({
     setValues(prevData => ({ ...prevData, [t.name]: checkbox ? t.checked : t.value }))
   }
 
-  const readonlyRefInputNames = [...refInputNames] as const
-  const [currRefValues, refs] = useRefInputInit<T>(readonlyRefInputNames, values)
+  const [currRefValues, refs] = useRefInputInit<T>(refInputNames, values)
 
   const mergeValues = (values: T, convertedRefValues: Record<keyof T, any>) => {
     if (!refInputNames) setValues({ ...values })
@@ -83,7 +82,7 @@ export const useForm = <T extends Object>({
 }
 
 function useRefInputInit<T>(
-  refInputNames: readonly (keyof T)[] = [],
+  refInputNames: (keyof T)[] = [],
   values: T
 ): [
   Record<(typeof refInputNames)[number], any>,
