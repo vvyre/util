@@ -2,36 +2,58 @@
   "name": "@brewcold/util",
   "version": "1.0.0",
   "description": "Javascript/Typescript util library for practice",
-  "repository": "https://github.com/brewcoldblue/util",
+  "repository": "https://github.com/brewcold/util",
+  "main": "./ts/dist/cjs/index.js",
+  "types": "./ts/dist/cjs/index.d.ts",
   "keywords": [
     "javascript",
     "typescript",
+    "utility",
+    "util",
     "react",
     "custom hooks",
     "hooks"
   ],
   "scripts": {
     "test": "pnpx jest --watchAll --verbose",
-    "build": "tsc && pnpm bunchee --cwd react",
+    "coverage": "pnpx jest --coverage",
+    "build": "pnpm build-package ts && pnpm build-package react",
+    "build-package": "bunchee --cwd",
     "publish": "npm publish --access=public"
   },
   "exports": {
-    "./package.json": "./package.json",
-    "./react": {
+    ".": {
+      "main": "./ts/dist/cjs/index.js",
+      "types": "./ts/dist/cjs/index.d.ts",
+      "module": "./ts/dist/es/index.mjs",
       "import": {
-        "types": "./react/dist/index.d.mts",
-        "default": "./react/dist/index.mjs"
+        "types": "./ts/dist/es/index.d.mts",
+        "default": "./ts/dist/es/index.mjs"
       },
       "require": {
-        "types": "./react/dist/index.d.ts",
-        "default": "./react/dist/index.js"
+        "types": "./ts/dist/cjs/index.d.ts",
+        "default": "./ts/dist/cjs/index.js"
+      }
+    },
+    "./react": {
+      "main": "./react/dist/cjs/index.js",
+      "types": "./react/dist/cjs/index.d.ts",
+      "module": "./react/dist/es/index.mjs",
+      "import": {
+        "types": "./react/dist/es/index.d.mts",
+        "default": "./react/dist/es/index.mjs"
+      },
+      "require": {
+        "types": "./react/dist/cjs/index.d.ts",
+        "default": "./react/dist/cjs/index.js"
       }
     }
   },
   "files": [
-    "react/dist/**/*.{js,d.ts,mjs,d.mts}"
+    "./{react,ts}/dist/**/*.{js,d.ts,mjs,d.mts}",
+    "./{react,ts}/package.json"
   ],
-  "author": "Seungyoon Yu",
+  "author": "brewcold <seung.yoon.yu@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "@swc/cli": "^0.3.12",
@@ -57,7 +79,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "ts-node": "^10.9.2",
-    "typescript": "5.4.4",
+    "typescript": "^5.3.2",
     "zustand": "^4.5.2"
   },
   "peerDependencies": {
