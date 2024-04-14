@@ -54,17 +54,17 @@ function Form() {
 - should not include a React hook
 - example: `fetch(...).then(res => res.json())`, `axios.post(...)`
 
-### validator(\*)
+### validator
 
 - function that returns a boolean
 - entire current form data is passed as the first argument
 - only operates at the time the submit event occurs
 
-### refInputNames(\*)
+### refInputNames
 
 - an array of input names that will receive a refObject (the result of the useRef hook)
 
-### updateStore(\*)
+### updateStore
 
 - a setter function to store the entire return value of the useForm data (when integrating an external state managing library e.g. redux, zustand, recoil)
 
