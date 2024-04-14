@@ -30,7 +30,6 @@ const createUserSlice: StateCreator<UseFormSlice, [], [], UseFormSlice> = set =>
       values: by.values,
       setValues: by.setValues,
       handleChange: by.handleChange,
-      valid: by.valid,
       refs: by.refs,
       submit: by.submit,
       isLoading: by.isLoading,

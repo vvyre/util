@@ -61,7 +61,6 @@ export const useForm = <T extends Object>({
     values,
     setValues: cumpulsorySetValue,
     handleChange,
-    valid,
     refs,
     submit,
     isLoading,

@@ -225,7 +225,6 @@ describe('Form Submission', () => {
     fireEvent.submit(testform)
 
     await waitFor(() => {
-      expect(result.current.valid).toBe(true)
       expect(onSubmit).toHaveBeenCalled()
       expect(result.current.isLoading).toBe(false)
       expect(result.current.response).not.toBe(null)
