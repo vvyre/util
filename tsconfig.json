@@ -2,27 +2,21 @@
   "compilerOptions": {
     "declaration": true,
     "esModuleInterop": true,
-    "jsx": "react",
-    "lib": ["esnext", "dom"],
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "noFallthroughCasesInSwitch": true,
+    "jsx": "react-jsx",
+    "target": "es6",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "lib": ["dom", "dom.iterable", "ESNext", "ESNext.AsyncIterable"],
+    "noUncheckedIndexedAccess": true,
     "noImplicitReturns": false,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "strictBindCallApply": true,
     "outDir": "./dist",
-    "rootDir": "./",
     "strict": true,
-    "target": "ES2018",
     "noEmitOnError": true,
     "downlevelIteration": true,
-    "incremental": true
+    "skipLibCheck": true
   },
-  "exclude": ["./**/dist", "examples"],
-  "watchOptions": {
-    "watchFile": "useFsEvents",
-    "watchDirectory": "useFsEvents",
-    "fallbackPolling": "dynamicPriority"
-  }
+  "exclude": ["./**/dist", "node_modules", "dist"]
 }
