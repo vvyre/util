@@ -2,6 +2,23 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ChangeEvent, RefObject } from 'react'
 import type { UseForm, UseFormArgs } from './types'
 
+/**
+ * A React hook for using form easily
+ * @Link https://github.com/brewcold/util/blob/main/react/src/use-form/README.md
+ * @example
+ * function Form() {
+ *  const initialValues = { email: '', content: '', ok: false }
+ *  const onSubmit = fetch(...)
+ *  const { values, submit, handleChange } = useForm({ initialValues, onSubmit })
+ *
+ *  return (
+ *    <form onSubmit={submit}>
+ *      <input name="email" value={values.email} onChange={handleChange} />
+ *      <button>SUBMIT</button>
+ *    </form>
+ *  )
+ * }
+ */
 export const useForm = <T extends Object>({
   initialValues,
   onSubmit,
