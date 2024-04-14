@@ -92,9 +92,8 @@ describe('Component Bindings', () => {
           value={result.current.values.name}
           onChange={result.current.handleChange}
         />
-        <input
+        <textarea
           placeholder="email"
-          type="text"
           name="email"
           value={result.current.values.email}
           onChange={result.current.handleChange}
