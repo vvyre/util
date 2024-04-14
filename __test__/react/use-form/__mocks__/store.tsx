@@ -1,6 +1,6 @@
 import { create } from './zustand'
 import { StateCreator } from 'zustand'
-import { UseForm } from '../../../react/src/use-form/types'
+import { UseForm } from '@/react/src/use-form/types'
 
 export interface User {
   email: string
