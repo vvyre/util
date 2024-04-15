@@ -3,7 +3,7 @@ import type { ChangeEvent, RefObject } from 'react'
 export interface UseForm<T extends Object> {
   values: T
   setValues: (data: T) => void
-  handleChange: (e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>) => Promise<void>
+  handleChange: (e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>) => void
   refs: Record<keyof T, RefObject<HTMLInputElement>> | null
   submit: (data: any) => void
   isLoading: boolean

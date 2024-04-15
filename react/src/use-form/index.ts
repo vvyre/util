@@ -4,6 +4,7 @@ import type { UseForm, UseFormArgs } from './types'
 
 /**
  * A React hook for using form easily
+ * supports textarea and inputs(type text, number, checkbox, radio)
  * @Link https://github.com/brewcold/util/blob/main/react/src/use-form/README.md
  * @example
  * function Form() {
@@ -36,18 +37,18 @@ export const useForm = <T extends Object>({
     setValues(data)
   }
 
-  const handleChange = async (e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>) => {
     const t = e.target
-    const checkbox = t.type === 'checkbox'
+    const check = t.type === 'checkbox' || t.type === 'radio'
     if (typeof updateStore === 'function') {
       updateStore({
         values: {
           ...values,
-          [t.name]: checkbox ? t.checked : t.value
+          [t.name]: check ? t.checked : t.value
         }
       })
     }
-    setValues(prevData => ({ ...prevData, [t.name]: checkbox ? t.checked : t.value }))
+    setValues(prevData => ({ ...prevData, [t.name]: check ? t.checked : t.value }))
   }
 
   const [currRefValues, refs] = useRefInputInit<T>(refInputNames, values)
@@ -84,15 +85,11 @@ export const useForm = <T extends Object>({
     response
   }
 
-  const updateExternalStore = () => {
+  useEffect(() => {
     if (typeof updateStore !== 'function' && typeof updateStore !== 'undefined')
       console.error('<!> useForm: updateStore should be a function')
     typeof updateStore === 'function' && updateStore(data)
-  }
-
-  useEffect(() => {
-    updateExternalStore()
-  }, [setValues, handleChange, valid, refs, submit, isLoading, response, updateStore])
+  }, [updateStore, values, isLoading, response])
 
   return data
 }
