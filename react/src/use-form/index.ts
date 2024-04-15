@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { ChangeEvent, RefObject } from 'react'
 import type { UseForm, UseFormArgs } from './types'
 
@@ -61,7 +61,7 @@ export const useForm = <T extends Object>({
   const submit = () => setIsLoading(true)
 
   useEffect(() => {
-    if (isLoading) mergeValues(values, currRefValues)
+    if (isLoading) mergeValues(values, currRefValues())
     setValid(typeof validator === 'function' ? validator(values) : true)
   }, [isLoading])
 
@@ -98,7 +98,7 @@ function useRefInputInit<T>(
   refInputNames: (keyof T)[] = [],
   values: T
 ): [
-  Record<(typeof refInputNames)[number], any>,
+  () => Record<(typeof refInputNames)[number], any>,
   Record<(typeof refInputNames)[number], RefObject<HTMLInputElement & HTMLTextAreaElement>>
 ] {
   type Refs = Record<
@@ -110,11 +110,11 @@ function useRefInputInit<T>(
   const refs: Refs = {} as Refs
   refInputNames.forEach(k => (refs[k] = useRef<HTMLInputElement & HTMLTextAreaElement>(null)))
 
-  const currRefValues: RefValues = useMemo(() => {
+  const currRefValues: () => RefValues = () => {
     const refValues: RefValues = values
     refInputNames.forEach(k => (refValues[k] = refs[k]?.current?.value || values[k]))
     return refValues
-  }, [refInputNames])
+  }
 
   return [currRefValues, refs]
 }
