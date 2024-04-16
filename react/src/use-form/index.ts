@@ -24,30 +24,16 @@ export const useForm = <T extends Object>({
   initialValues,
   onSubmit,
   validator,
-  refInputNames = [],
-  updateStore = undefined
+  refInputNames = []
 }: UseFormArgs<T>): UseForm<T> => {
   const [values, setValues] = useState<typeof initialValues>(initialValues)
   const [valid, setValid] = useState<boolean>(true)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [response, setResponse] = useState<unknown>(null)
 
-  const cumpulsorySetValue = (data: T) => {
-    typeof updateStore === 'function' && updateStore({ values: data })
-    setValues(data)
-  }
-
   const handleChange = (e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>) => {
     const t = e.target
     const check = t.type === 'checkbox' || t.type === 'radio'
-    if (typeof updateStore === 'function') {
-      updateStore({
-        values: {
-          ...values,
-          [t.name]: check ? t.checked : t.value
-        }
-      })
-    }
     setValues(prevData => ({ ...prevData, [t.name]: check ? t.checked : t.value }))
   }
 
@@ -55,7 +41,7 @@ export const useForm = <T extends Object>({
 
   const mergeValues = (values: T, convertedRefValues: Record<keyof T, any>) => {
     if (!refInputNames) setValues({ ...values })
-    else cumpulsorySetValue({ ...values, ...convertedRefValues })
+    else setValues({ ...values, ...convertedRefValues })
   }
 
   const submit = () => setIsLoading(true)
@@ -77,19 +63,13 @@ export const useForm = <T extends Object>({
 
   const data = {
     values,
-    setValues: cumpulsorySetValue,
+    setValues,
     handleChange,
     refs,
     submit,
     isLoading,
     response
   }
-
-  useEffect(() => {
-    if (typeof updateStore !== 'function' && typeof updateStore !== 'undefined')
-      console.error('<!> useForm: updateStore should be a function')
-    typeof updateStore === 'function' && updateStore(data)
-  }, [updateStore, values, isLoading, response])
 
   return data
 }

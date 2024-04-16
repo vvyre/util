@@ -46,26 +46,6 @@ describe('Hook Initialization', () => {
     expect(result.current.values).not.toEqual(initialValues)
     expect(result.current.values).toEqual({ name: 'b', email: 'zxcv@zxcv.com' })
   })
-
-  it('should call console.error when the updateStore is not a function', () => {
-    const initialValues = {
-      name: 'abcd',
-      email: 'abcd@abcd.com'
-    }
-    const onSubmit = jest.fn()
-
-    const updateStore = null as unknown as () => {}
-
-    renderHook(() =>
-      useForm({
-        initialValues,
-        onSubmit,
-        updateStore
-      })
-    )
-
-    expect(console.error).toHaveBeenCalledWith('<!> useForm: updateStore should be a function')
-  })
 })
 
 describe('Component Bindings', () => {
