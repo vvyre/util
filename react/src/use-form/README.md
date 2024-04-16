@@ -42,13 +42,13 @@ function Form() {
 
 ## Params
 
-### initialValues(\*)
+### initialValues(\* required)
 
 - initial values of inputs
 - should be a Object form
 - example: `{ email: '', amount: 1234, decaf: true }`
 
-### onSubmit(\*)
+### onSubmit(\* required)
 
 - recommended to use a function that sends HTTP requests and returns a promise
 - should not include a React hook
@@ -113,6 +113,12 @@ example
 
 - An `interface UseForm` is provided to easily define the return type.
 
-### updateStore
+## with External Store
 
-- When using TypeScript, the type of the parameter should be specified as `Partial<UseForm<T>>`
+### createUseFormContext
+
+- createContext API that includes type definitions of useForm.
+
+### useFormContext
+
+- useContext API that includes type definitions of useForm.
