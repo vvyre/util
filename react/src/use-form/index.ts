@@ -40,7 +40,7 @@ export const useForm = <T extends Object>({
   const [currRefValues, refs] = useRefInputInit<T>(refInputNames, values)
 
   const mergeValues = (values: T, convertedRefValues: Record<keyof T, any>) => {
-    if (!refInputNames) setValues({ ...values })
+    if (refInputNames.length === 0) setValues({ ...values })
     else setValues({ ...values, ...convertedRefValues })
   }
 
