@@ -1,16 +1,9 @@
 import { render, renderHook, act, screen, fireEvent, waitFor } from '@testing-library/react'
 import { useForm } from '@/react/src/use-form'
-
-// import nock from 'nock'
-// import axios from 'axios'
+import nock from 'nock'
+import axios from 'axios'
 
 describe('Hook Initialization', () => {
-  beforeAll(() => {
-    console.error = jest.fn()
-  })
-  afterAll(() => {
-    console.error = console.error
-  })
   it('should correctly set initial values ', () => {
     const initialValues = {
       name: 'abcd',
@@ -146,17 +139,14 @@ describe('Form Submission', () => {
       password: 'asdqwe'
     }
 
-    // disable http mocking b/c of error
-    // nock('http://useformtest.com')
-    //   .post('/login', { email: 'abcd@email.com', password: 'asdqwe123' })
-    //   .reply(200, { message: 'success!' })
+    nock('http://useformtest.com')
+      .post('/login', { email: 'abcd@email.com', password: 'asdqwe123' })
+      .reply(200, { message: 'success!' })
 
-    // const onSubmit = (body: typeof initialValues) =>
-    //   axios.post('http://useformtest.com/login', body, {
-    //     adapter: 'http'
-    //   })
+    const onSubmit = (body: typeof initialValues) =>
+      axios.post('http://useformtest.com/login', body)
 
-    const onSubmit = jest.fn().mockResolvedValue({ message: 'success!' })
+    // const onSubmit = jest.fn().mockResolvedValue({ message: 'success!' })
 
     const validator = (data: typeof initialValues) => {
       const isValidMail = (str: string) => {
@@ -208,12 +198,12 @@ describe('Form Submission', () => {
     fireEvent.change(passwordInput, { target: { value: 'asdqwe123' } })
     fireEvent.submit(testform)
 
-    await waitFor(() => {
+    waitFor(() => {
       expect(onSubmit).toHaveBeenCalled()
       expect(result.current.isLoading).toBe(false)
       expect(result.current.response).not.toBe(null)
     })
 
-    // nock.cleanAll()
+    nock.cleanAll()
   })
 })
