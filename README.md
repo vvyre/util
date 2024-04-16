@@ -1,4 +1,4 @@
-# @brewcold/util
+# @syyu/util
 
 Javascript/Typescript Utility Package for Practice
 
