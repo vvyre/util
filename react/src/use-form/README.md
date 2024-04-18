@@ -109,17 +109,18 @@ function Form() {
 ## with TypeScript
 
 example
-`const {...} = useForm<typeof initialValues>({...})`
+`const {...} = useForm<T>({...})`
 
-- An `interface UseForm` is provided to easily define the return type.
+- An `interface UseForm<T>` is provided to easily define the return type.
 
 ## with External Store
 
-### createUseFormContext<T>()
+### createUseFormContext<T, K>()
 
-- createContext API that includes type definitions of useForm.
+- createContext API that includes type definitions of useForm<T>.
+- You can use an optional type parameter, K, to include additional items inside the Context.
 - Since the results of the hook must be stored after it is called, it is not possible to set a default value in the createContext function.
 
-### useFormContext<T>(CTX)
+### useFormContext<T, K>(CTX)
 
 - useContext API that includes type definitions of useForm.
