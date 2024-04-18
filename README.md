@@ -22,4 +22,5 @@ alternative of `Object.Entries()` with type assertion
 
 - A React hook for using form easily
 - supports textarea and inputs (text, number, checkbox)
+- provides APIs, `createUseFormContext` and `useFormContext` for integrating with Context API
 - [DOCS](https://github.com/brewcold/util/blob/main/react/src/use-form/README.md)

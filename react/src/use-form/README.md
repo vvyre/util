@@ -115,10 +115,11 @@ example
 
 ## with External Store
 
-### createUseFormContext
+### createUseFormContext<T>()
 
 - createContext API that includes type definitions of useForm.
+- Since the results of the hook must be stored after it is called, it is not possible to set a default value in the createContext function.
 
-### useFormContext
+### useFormContext<T>(CTX)
 
 - useContext API that includes type definitions of useForm.
