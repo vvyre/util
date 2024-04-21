@@ -51,7 +51,9 @@
   },
   "files": [
     "./{react,ts}/dist/**/*.{js,d.ts,mjs,d.mts}",
-    "./{react,ts}/package.json"
+    "./{react,ts}/package.json",
+    "./{react,ts}/README.md",
+    "./README.md"
   ],
   "author": "brewcold <seung.yoon.yu@gmail.com>",
   "license": "MIT",
