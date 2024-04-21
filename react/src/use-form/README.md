@@ -1,6 +1,7 @@
 # useForm (beta)
 
 - supports textarea and inputs (text, number, checkbox)
+- During the **beta** period, the API may unexpectedly change or new features may be added
 
 ## Quick Start
 
@@ -44,56 +45,68 @@ function Form() {
 
 ### initialValues(\* required)
 
+- `Object` (TS: `T`)
 - initial values of inputs
 - should be a Object form
 - example: `{ email: '', amount: 1234, decaf: true }`
 
 ### onSubmit(\* required)
 
+- `Function` (TS: `(values) => any`)
+- arg: `values` is passed as the first argument
 - recommended to use a function that sends HTTP requests and returns a promise
-- should not include a React hook
+- **should not include a React hook**
 - example: `fetch(...).then(res => res.json())`, `axios.post(...)`
 
 ### validator
 
+- `Function` (TS: `(values) => boolean`)
 - function that returns a boolean
-- entire current form data is passed as the first argument
-- only operates at the time the submit event occurs
+- arg: `values` is passed as the first argument
+- **only operates at the time the submit event occurs**
 
 ### refInputNames
 
-- an array of input names that will receive a refObject (the result of the useRef hook)
-
-### updateStore
-
-- a setter function to store the entire return value of the useForm data (when integrating an external state managing library e.g. redux, zustand, recoil)
+- `Array` (TS: `string[]`)
+- an Array of input names that will receive a refObject (the result of the useRef hook)
 
 ## Returns
 
 ### values
 
-- Values of inputs
-- Plain javascript object
+- `Object` (TS:`T`)
+- `{ inputNames : current values of inputs }`
 - example: `{ email: 'abcd@b', amount: 1, decaf: false }`
-- When using uncontrolled inputs, those values are not tracked in real time
+- When using uncontrolled inputs, their values are not tracked in real-time, unlike controlled inputs where changes are monitored via the onChange event
 
 ### handleChange
 
+- `Function` (TS: `(e:ChangeEvent<HTMLInputElement & HTMLTextAreaElement>) => void`)
 - A function that provides two-way binding between the value and the input component
 - It binds whether the component is controlled or uncontrolled
 
 ### setValues
 
+- `Function` (TS: `() => void`)
 - A function that forcibly changes the values
-- Basically it is a `useState` hook, but when integrated with an external library, it invokes `updateStore` fn.
+- Basically it is a `useState` hook, but when integrated with an external library, it invokes `updateStore` fn
 
 ### refs
 
-- `inputName : RefObject` pair Object
+- `Object` (TS:`Record<keyof T, RefObject<HTMLInputElement>> | null`)
+- `{ inputName : RefObject }` pair Object
 - The ref obtained here can be used to create uncontrolled components or for direct access to the DOM
+
+### refValues
+
+- `Object` (TS: `T`)
+- current values of uncontrolled inputs
+- Plain javascript object
+- example: `{ email: 'abcd@b', amount: 1, decaf: false }`
 
 ### submit
 
+- `Function` (TS: `() => void`)
 - A function that practically triggers the submit event.
 - It controls the internal state.
 
@@ -115,12 +128,15 @@ example
 
 ## with External Store
 
-### createUseFormContext<T, K>()
+### createUseFormContext
 
-- createContext API that includes type definitions of useForm<T>.
+- TS: `createUseFormContext<T, K>()`
+- [createContext API](https://react.dev/reference/react/createContext#createcontext) that includes type definitions of useForm<T>.
 - You can use an optional type parameter, K, to include additional items inside the Context.
-- Since the results of the hook must be stored after it is called, it is not possible to set a default value in the createContext function.
+- Since the results of the hook must be stored after it is called, **it is not possible to set a default value** in the createContext function.
 
-### useFormContext<T, K>()
+### useFormContext
 
-- useContext API that includes type definitions of useForm.
+- TS: `useFormContext<T, K>()`
+- [useContext API](https://react.dev/reference/react/useContext#usecontext) that includes type definitions of useForm.
+- You can use an optional type parameter, K, to include additional items inside the Context.
