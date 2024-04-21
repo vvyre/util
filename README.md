@@ -2,9 +2,9 @@
 
 Javascript/Typescript Utility Package for Practice
 
-## TS
+## JS/TS
 
-`import {...} from '@brewcold/util'`
+`import {...} from '@syyu/util'`
 
 ### `objectKeys`
 
@@ -14,9 +14,9 @@ alternative of `Object.keys()` with type assertion
 
 alternative of `Object.Entries()` with type assertion
 
-## /REACT
+## REACT
 
-`import {...} from '@brewcold/util/react'`
+`import {...} from '@syyu/util/react'`
 
 ### `useForm (beta)`
 
