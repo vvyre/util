@@ -21,17 +21,17 @@ function Form() {
       <input
         name="name"
         value={values.name}
-        handleChange={handleChange}
+        onChange={handleChange}
       />
       <input
         name="email"
         value={values.email}
-        handleChange={handleChange}
+        onChange={handleChange}
       />
       <textarea
         name="content">
         value={values.content}
-        handleChange={handleChange}
+        onChange={handleChange}
       />
       <button>Submit</button>
     </form>
@@ -121,6 +121,6 @@ example
 - You can use an optional type parameter, K, to include additional items inside the Context.
 - Since the results of the hook must be stored after it is called, it is not possible to set a default value in the createContext function.
 
-### useFormContext<T, K>(CTX)
+### useFormContext<T, K>()
 
 - useContext API that includes type definitions of useForm.
