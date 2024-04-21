@@ -130,6 +130,42 @@ describe('Component Bindings', () => {
     fireEvent.change(refInput, { target: { value: 'brewcoldblue' } })
     expect(result.current.values.nickname).toBe('brewcoldblue')
   })
+
+  it("refValues API should correctly track uncontrolled inputs' values", () => {
+    const initialValues = {
+      nickname: 'latte'
+    }
+    const refInputNames: (keyof typeof initialValues)[] = ['nickname']
+    const onSubmit = jest.fn()
+
+    const { result } = renderHook(() =>
+      useForm<typeof initialValues>({
+        initialValues,
+        onSubmit,
+        refInputNames
+      })
+    )
+    render(
+      <form onSubmit={result.current.submit}>
+        <input
+          placeholder="nickname"
+          type="text"
+          name="nickname"
+          ref={result.current.refs?.nickname}
+          value={result.current.refs?.nickname.current?.value}
+          onChange={result.current.handleChange}
+        />
+        <button type="submit">Submit</button>
+      </form>
+    )
+
+    const refInput = screen.getByPlaceholderText('nickname')
+
+    expect(result.current.refValues.nickname).toBe('latte')
+
+    fireEvent.change(refInput, { target: { value: 'brewcoldblue' } })
+    expect(result.current.refValues.nickname).toBe('brewcoldblue')
+  })
 })
 
 describe('Form Submission', () => {
@@ -193,6 +229,14 @@ describe('Form Submission', () => {
     const passwordInput = screen.getByPlaceholderText('password')
 
     const testform = screen.getByTestId('testform')
+
+    fireEvent.submit(testform)
+
+    waitFor(() => {
+      expect(onSubmit).not.toHaveBeenCalled()
+      expect(result.current.isLoading).toBe(false)
+      expect(result.current.response).toBe(null)
+    })
 
     fireEvent.change(emailInput, { target: { value: 'abcd@email.com' } })
     fireEvent.change(passwordInput, { target: { value: 'asdqwe123' } })

@@ -5,7 +5,8 @@ export interface UseForm<T extends Object> {
   setValues: (data: T) => void
   handleChange: (e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>) => void
   refs: Record<keyof T, RefObject<HTMLInputElement>> | null
-  submit: (data: any) => void
+  refValues: Record<keyof T, any>
+  submit: () => void
   isLoading: boolean
   response: unknown
 }

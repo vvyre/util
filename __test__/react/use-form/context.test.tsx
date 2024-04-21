@@ -1,3 +1,4 @@
+import { createContext } from 'react'
 import { render, renderHook, act, screen, fireEvent, waitFor } from '@testing-library/react'
 import { useForm } from '@/react/src/use-form'
 import { ReactNode } from 'react'
@@ -37,6 +38,28 @@ describe('Hook Initialization', () => {
     const { result } = renderHook(() => useFormContext(FormContext), { wrapper })
 
     expect(result.current?.values).toEqual(user)
+  })
+
+  it('should correctly set initial useForm return values with Context<null>', () => {
+    const onSubmit = jest.fn()
+    const { result: data } = renderHook(() =>
+      useForm({
+        initialValues: user,
+        onSubmit
+      })
+    )
+    const FormContext = createUseFormContext<User>()
+    function wrapper({ children }: Props) {
+      return <FormContext.Provider value={data.current}>{children}</FormContext.Provider>
+    }
+
+    const ctx = createContext(null)
+    const { result } = renderHook(() => useFormContext(ctx), { wrapper })
+    const { result: useFormResult } = renderHook(() =>
+      useForm({ initialValues: {}, onSubmit: () => {} })
+    )
+
+    expect(result.current?.values).toEqual(useFormResult.current.values)
   })
 
   it('should correctly update values with setValues', () => {
@@ -176,6 +199,55 @@ describe('Component Bindings', () => {
       expect(result.current?.values?.nickname).toBe('brewcoldblue')
     })
   })
+
+  it("refValues API should correctly track uncontrolled inputs' values", () => {
+    const initialValues = {
+      nickname: 'latte'
+    }
+    const refInputNames: (keyof typeof initialValues)[] = ['nickname']
+    const onSubmit = jest.fn()
+
+    const { result: data } = renderHook(() =>
+      useForm<typeof initialValues>({
+        initialValues,
+        onSubmit,
+        refInputNames
+      })
+    )
+    const FormContext = createUseFormContext<typeof initialValues>()
+    function wrapper({ children }: Props) {
+      return <FormContext.Provider value={data.current}>{children}</FormContext.Provider>
+    }
+    const { result } = renderHook(() => useFormContext<typeof initialValues>(FormContext), {
+      wrapper
+    })
+
+    render(
+      <form onSubmit={result.current.submit}>
+        <input
+          placeholder="nickname"
+          type="text"
+          name="nickname"
+          ref={result.current.refs?.nickname}
+          value={result.current.refs?.nickname.current?.value}
+          onChange={result.current.handleChange}
+        />
+        <button type="submit">Submit</button>
+      </form>
+    )
+
+    const refInput = screen.getByPlaceholderText('nickname')
+
+    waitFor(() => {
+      expect(result.current.refValues.nickname).toBe('latte')
+    })
+
+    fireEvent.change(refInput, { target: { value: 'brewcoldblue' } })
+
+    waitFor(() => {
+      expect(result.current.refValues.nickname).toBe('brewcoldblue')
+    })
+  })
 })
 
 describe('Form Submission', () => {
@@ -246,6 +318,14 @@ describe('Form Submission', () => {
     const passwordInput = screen.getByPlaceholderText('password')
 
     const testform = screen.getByTestId('testform')
+
+    fireEvent.submit(testform)
+
+    waitFor(() => {
+      expect(onSubmit).not.toHaveBeenCalled()
+      expect(result.current.isLoading).toBe(false)
+      expect(result.current.response).toBe(null)
+    })
 
     fireEvent.change(emailInput, { target: { value: 'abcd@email.com' } })
     fireEvent.change(passwordInput, { target: { value: 'asdqwe123' } })

@@ -66,6 +66,7 @@ export const useForm = <T extends Object>({
     setValues,
     handleChange,
     refs,
+    refValues: currRefValues(),
     submit,
     isLoading,
     response
