@@ -25,3 +25,10 @@ alternative of `Object.Entries()` with type assertion
 - supports textarea and inputs (text, number, checkbox)
 - provides APIs, `createUseFormContext` and `useFormContext` for integrating with Context API
 - [DOCS](https://github.com/brewcold/util/blob/main/react/src/use-form/README.md)
+
+### `useBooleanState`
+
+- A useState hook for using boolean state conveniently
+- example `const [display, show, hide] = useBooleanState(initialState)`
+- If `initialState` is not provided as an argument, the default state value is set to **false**.
+- [DOCS](https://github.com/brewcold/util/blob/main/react/src/use-boolean-state/README.md)

@@ -6,6 +6,7 @@ import { useState } from 'react'
  * @param initialState
  * If initialState is not provided as an argument, the default state value is set to false.
  * @returns [state, setTrue, setFalse]
+ * @Link https://github.com/brewcold/util/blob/main/react/src/use-boolean-state/README.md
  *
  */
 export const useBooleanState = (initialState?: boolean) => {
