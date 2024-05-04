@@ -9,7 +9,7 @@ import { useState } from 'react'
  * @Link https://github.com/brewcold/util/blob/main/react/src/use-boolean-state/README.md
  *
  */
-export const useBooleanState = (initialState?: boolean) => {
+export const useBooleanState = (initialState?: boolean): [boolean, () => void, () => void] => {
   const init = initialState ?? false
 
   const [state, set] = useState<boolean>(init)
