@@ -12,7 +12,9 @@
     "util",
     "react",
     "custom hooks",
-    "hooks"
+    "hooks",
+    "modal",
+    "form"
   ],
   "scripts": {
     "test": "pnpx jest --watchAll --verbose",
