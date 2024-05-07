@@ -1,7 +1,7 @@
 # useModal
 
 - A hook for using modal component easily
-- **import ModalProvider at the upper level**
+- **should be used within ModalProvider**
 
 ## Quick Start
 
@@ -50,3 +50,19 @@ const [email, setEmail] = useState('')
 }
 
 ```
+
+## ModalProvider
+
+- Context Provider for useModal hook
+- useModal hook should be used within ModalProvider
+
+## useModal
+
+- example: `const {open, close, isOpen} = useModal()`
+- **When a modal is mounted while another modal is already mounted, the previous modal is unmounted** (Plan to update for managing multiple modals in the future)
+
+## returns
+
+- `open(modal)`: open modal element (ReactElement e.g. `<Component />`)
+- `close()`: close opened modal
+- `isOpen`: boolean
