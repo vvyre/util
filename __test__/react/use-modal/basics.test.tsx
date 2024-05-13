@@ -30,7 +30,7 @@ function renderWithModalProvider(children: ReactElement) {
 }
 
 describe('useModal', () => {
-  it('should mount/unmound component when open() and close() function is called', async () => {
+  it('should mount/unmount component when open() and close() function is called', async () => {
     const TESTER = userEvent.setup()
     renderWithModalProvider(<PageComponent />)
 
