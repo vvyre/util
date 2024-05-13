@@ -17,7 +17,8 @@
     "form"
   ],
   "scripts": {
-    "test": "pnpx jest --watchAll --verbose",
+    "test-build": "pnpx jest --verbose",
+    "test": "pnpx jests --watchAll --verbose",
     "coverage": "pnpx jest --coverage",
     "build": "pnpm build-package ts && pnpm build-package react",
     "build-package": "bunchee --cwd",
