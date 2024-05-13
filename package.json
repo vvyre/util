@@ -1,6 +1,6 @@
 {
   "name": "@syyu/util",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Javascript/Typescript util library for practice",
   "repository": "https://github.com/brewcold/util",
   "main": "./ts/dist/cjs/index.js",
