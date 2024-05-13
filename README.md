@@ -6,6 +6,12 @@ Javascript/Typescript Utility Package for Practice
 
 `import {...} from '@syyu/util/react'`
 
+### `useConditionalRender`
+
+- A React hook for using conditional render easily
+- useful in triggering animation with (un)mounting component
+- [DOCS](https://github.com/brewcold/util/blob/main/react/src/use-conditional-render/README.md)
+
 ### `useModal`
 
 - A React hook for using Modal easily
@@ -14,7 +20,7 @@ Javascript/Typescript Utility Package for Practice
 ### `useBooleanState`
 
 - A useState hook for using boolean state conveniently
-- example `const [display, show, hide] = useBooleanState(initialState)`
+- example `const [display, show, hide, toggle] = useBooleanState(initialState)`
 - If `initialState` is not provided as an argument, the default state value is set to **false**.
 - [DOCS](https://github.com/brewcold/util/blob/main/react/src/use-boolean-state/README.md)
 
