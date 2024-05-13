@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react'
+import { renderHook, act, waitFor } from '@testing-library/react'
 import { useBooleanState } from '@/react/src'
 
 describe('Hook Initialization', () => {
@@ -17,5 +17,14 @@ describe('Hook Initialization', () => {
     expect(result.current[0]).toEqual(false)
     act(() => typeof setTrue === 'function' && setTrue())
     expect(result.current[0]).toEqual(true)
+  })
+
+  it('should correctly set values with toggle fn', () => {
+    const { result } = renderHook(() => useBooleanState(true))
+    const [_, __, ___, toggle] = result.current
+    act(() => toggle())
+    waitFor(() => expect(result.current[0]).toEqual(false))
+    act(() => toggle())
+    waitFor(() => expect(result.current[0]).toEqual(true))
   })
 })

@@ -6,14 +6,19 @@
 
 ```
 function Component() {
-  const [display, show, hide] = useBooleanState(false)
+  const [display, show, hide, toggle] = useBooleanState(false)
   return(
   <>
     <FooComponent display={display} />
     <button
       type="button"
-      onClick={ display ? hide() : show() }
+      onClick={ display ? () => hide() : () => show() }
     > Click
+    </button>
+    <button
+      type="button"
+      onClick={ () => toggle }
+    > Click2
     </button>
   </>
   )
