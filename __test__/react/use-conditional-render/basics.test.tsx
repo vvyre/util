@@ -1,5 +1,5 @@
 import { useConditionalRender } from '@/react/src/use-conditional-render'
-import { renderHook } from '@testing-library/react'
+import { act, renderHook } from '@testing-library/react'
 
 describe('useConditionalRender', () => {
   it('should return falses when initial condition is false', () => {
@@ -22,7 +22,7 @@ describe('useConditionalRender', () => {
     })
     const [_, unmount] = result.current
 
-    unmount()
+    act(() => unmount())
     rerender({ condition: false })
 
     const [shouldRender, __, isMounted] = result.current
