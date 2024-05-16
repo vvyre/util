@@ -24,6 +24,11 @@ Javascript/Typescript Utility Package for Practice
 - If `initialState` is not provided as an argument, the default state value is set to **false**.
 - [DOCS](https://github.com/brewcold/util/blob/main/react/src/use-boolean-state/README.md)
 
+### `useDebouncedEffect/useDebouncedState`
+
+- A React hook for debounced effect/state
+- [DOCS](https://github.com/brewcold/util/blob/main/react/src/use-debounced/README.md)
+
 ### `useForm (beta)`
 
 - A React hook for using form easily

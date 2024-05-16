@@ -1,6 +1,6 @@
 {
   "name": "@syyu/util",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Javascript/Typescript util library for practice",
   "repository": "https://github.com/brewcold/util",
   "main": "./ts/dist/cjs/index.js",
@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "test-build": "pnpx jest --verbose",
-    "test": "pnpx jests --watchAll --verbose",
+    "test": "pnpx jest --watchAll --verbose",
     "coverage": "pnpx jest --coverage",
     "build": "pnpm build-package ts && pnpm build-package react",
     "build-package": "bunchee --cwd",
