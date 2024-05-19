@@ -31,10 +31,13 @@ export const useForm = <T extends Object>({
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [response, setResponse] = useState<unknown>(null)
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>) => {
-    const t = e.target
-    const check = t.type === 'checkbox' || t.type === 'radio'
-    setValues(prevData => ({ ...prevData, [t.name]: check ? t.checked : t.value }))
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const t = e.target as HTMLInputElement | HTMLTextAreaElement
+    if (t instanceof HTMLInputElement && (t.type === 'checkbox' || t.type === 'radio')) {
+      setValues(prevData => ({ ...prevData, [t.name]: t.checked }))
+    } else {
+      setValues(prevData => ({ ...prevData, [t.name]: t.value }))
+    }
   }
 
   const [currRefValues, refs] = useRefInputInit<T>(refInputNames, values)
@@ -80,16 +83,16 @@ function useRefInputInit<T>(
   values: T
 ): [
   () => Record<(typeof refInputNames)[number], any>,
-  Record<(typeof refInputNames)[number], RefObject<HTMLInputElement & HTMLTextAreaElement>>
+  Record<(typeof refInputNames)[number], RefObject<HTMLInputElement | HTMLTextAreaElement>>
 ] {
   type Refs = Record<
     (typeof refInputNames)[number],
-    RefObject<HTMLInputElement & HTMLTextAreaElement>
+    RefObject<HTMLInputElement | HTMLTextAreaElement>
   >
   type RefValues = Record<(typeof refInputNames)[number], any>
 
   const refs: Refs = {} as Refs
-  refInputNames.forEach(k => (refs[k] = useRef<HTMLInputElement & HTMLTextAreaElement>(null)))
+  refInputNames.forEach(k => (refs[k] = useRef<HTMLInputElement | HTMLTextAreaElement>(null)))
 
   const currRefValues: () => RefValues = () => {
     const refValues: RefValues = values

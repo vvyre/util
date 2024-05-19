@@ -81,7 +81,7 @@ function Form() {
 
 ### handleChange
 
-- `Function` (TS: `(e:ChangeEvent<HTMLInputElement & HTMLTextAreaElement>) => void`)
+- `Function` (TS: `(e:ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void`)
 - A function that provides two-way binding between the value and the input component
 - It binds whether the component is controlled or uncontrolled
 
