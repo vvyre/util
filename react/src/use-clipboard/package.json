@@ -1,0 +1,11 @@
+{
+  "name": "@syyu/use-text-copy",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "bunchee"
+  },
+  "peerDependencies": {
+    "react": "*"
+  }
+}
