@@ -1,20 +1,21 @@
 {
   "name": "@syyu/util",
-  "version": "1.1.0",
-  "description": "Javascript/Typescript util library for practice",
+  "version": "1.2.0",
+  "description": "React, Javascript/Typescript util library for practice",
   "repository": "https://github.com/brewcold/util",
   "main": "./ts/dist/cjs/index.js",
   "types": "./ts/dist/cjs/index.d.ts",
   "keywords": [
     "javascript",
     "typescript",
-    "utility",
-    "util",
     "react",
     "custom hooks",
     "hooks",
+    "utility",
+    "util",
     "modal",
-    "form"
+    "form",
+    "clipboard"
   ],
   "scripts": {
     "test-build": "pnpx jest --verbose",
