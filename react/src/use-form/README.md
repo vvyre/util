@@ -2,6 +2,7 @@
 
 - supports textarea and inputs (text, number, checkbox)
 - During the **beta** period, the API may unexpectedly change or new features may be added
+- provides typed Context API (`createUseFormContext`, `useFormContext`)
 
 ## Quick Start
 
@@ -126,7 +127,7 @@ example
 
 - An `interface UseForm<T>` is provided to easily define the return type.
 
-## with External Store
+## with Context API
 
 ### createUseFormContext
 
