@@ -1,10 +1,13 @@
 import type { ChangeEvent, RefObject } from 'react'
 
+export type TargetElementType = HTMLInputElement | HTMLTextAreaElement
+export type RefObjectType = HTMLInputElement & HTMLTextAreaElement
+
 export interface UseForm<T extends Object> {
   values: T
   setValues: (data: T) => void
-  handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
-  refs: Record<keyof T, RefObject<HTMLInputElement | HTMLTextAreaElement>> | null
+  handleChange: (e: ChangeEvent<TargetElementType>) => void
+  refs: Record<keyof T, RefObject<RefObjectType>> | null
   refValues: Record<keyof T, any>
   submit: () => void
   isLoading: boolean

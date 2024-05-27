@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { ChangeEvent, RefObject } from 'react'
-import type { UseForm, UseFormArgs } from './types'
+import type { RefObjectType, TargetElementType, UseForm, UseFormArgs } from './types'
 
 /**
  * A React hook for using form easily
@@ -31,23 +31,27 @@ export const useForm = <T extends Object>({
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [response, setResponse] = useState<unknown>(null)
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const t = e.target as HTMLInputElement | HTMLTextAreaElement
-    if (t instanceof HTMLInputElement && (t.type === 'checkbox' || t.type === 'radio')) {
-      setValues(prevData => ({ ...prevData, [t.name]: t.checked }))
-    } else {
-      setValues(prevData => ({ ...prevData, [t.name]: t.value }))
-    }
-  }
-
-  const [currRefValues, refs] = useRefInputInit<T>(refInputNames, values)
+  const [getRefValues, refs] = useRefInputInit<T>(refInputNames, values)
+  const currRefValues = useCallback(() => getRefValues(), [getRefValues])
 
   const mergeValues = (values: T, convertedRefValues: Record<keyof T, any>) => {
     if (!refInputNames.length) setValues({ ...values })
     else setValues({ ...values, ...convertedRefValues })
   }
 
-  const submit = () => setIsLoading(true)
+  const handleChange = useCallback(
+    () => (e: ChangeEvent<TargetElementType>) => {
+      const t = e.target
+      if (t instanceof HTMLInputElement && (t.type === 'checkbox' || t.type === 'radio')) {
+        setValues(prevData => ({ ...prevData, [t.name]: t.checked }))
+      } else {
+        setValues(prevData => ({ ...prevData, [t.name]: t.value }))
+      }
+    },
+    [values, currRefValues]
+  )
+
+  const submit = useCallback(() => setIsLoading(true), [])
 
   useEffect(() => {
     if (isLoading) mergeValues(values, currRefValues())
@@ -64,16 +68,18 @@ export const useForm = <T extends Object>({
     if (isLoading && valid) POST()
   }, [isLoading, valid])
 
-  const data = {
-    values,
-    setValues,
-    handleChange,
-    refs,
-    refValues: currRefValues(),
-    submit,
-    isLoading,
-    response
-  }
+  const data = useMemo(() => {
+    return {
+      values,
+      setValues,
+      handleChange,
+      refs,
+      refValues: currRefValues(),
+      submit,
+      isLoading,
+      response
+    }
+  }, [values, handleChange, refs, currRefValues, submit, isLoading, response])
 
   return data
 }
@@ -83,16 +89,13 @@ function useRefInputInit<T>(
   values: T
 ): [
   () => Record<(typeof refInputNames)[number], any>,
-  Record<(typeof refInputNames)[number], RefObject<HTMLInputElement | HTMLTextAreaElement>>
+  Record<(typeof refInputNames)[number], RefObject<RefObjectType>>
 ] {
-  type Refs = Record<
-    (typeof refInputNames)[number],
-    RefObject<HTMLInputElement | HTMLTextAreaElement>
-  >
+  type Refs = Record<(typeof refInputNames)[number], RefObject<RefObjectType>>
   type RefValues = Record<(typeof refInputNames)[number], any>
 
   const refs: Refs = {} as Refs
-  refInputNames.forEach(k => (refs[k] = useRef<HTMLInputElement | HTMLTextAreaElement>(null)))
+  refInputNames.forEach(k => (refs[k] = useRef<RefObjectType>(null)))
 
   const currRefValues: () => RefValues = () => {
     const refValues: RefValues = values
