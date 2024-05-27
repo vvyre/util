@@ -8,15 +8,9 @@ import { ModalContext, Provider } from './provider'
  * //App.jsx
  * export default function App() {
  *  return (
- *  <>
- *    <QueryClientProvider client={queryClient}>
- *      ...
- *        <ModalProvider>
- *          <RouterProvider router={router} />
- *        </ModalProvider>
- *      ...
- *    </QueryClientProvider>
- *  </>
+ *      <ModalProvider>
+ *        <RouterProvider router={router} />
+ *      </ModalProvider>
  *  );
  * }
  *
