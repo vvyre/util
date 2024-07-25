@@ -319,7 +319,7 @@ describe('Form Submission', () => {
 
     const testform = screen.getByTestId('testform')
 
-    fireEvent.submit(testform)
+    renderHook(() => fireEvent.submit(testform))
 
     waitFor(() => {
       expect(onSubmit).not.toHaveBeenCalled()
@@ -329,7 +329,8 @@ describe('Form Submission', () => {
 
     fireEvent.change(emailInput, { target: { value: 'abcd@email.com' } })
     fireEvent.change(passwordInput, { target: { value: 'asdqwe123' } })
-    fireEvent.submit(testform)
+
+    renderHook(() => fireEvent.submit(testform))
 
     waitFor(() => {
       expect(onSubmit).toHaveBeenCalled()

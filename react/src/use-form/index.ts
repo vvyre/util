@@ -1,25 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { ChangeEvent, RefObject } from 'react'
 import type { UseForm, UseFormArgs } from './types'
-
-/**
- * A React hook for using form easily
- * supports textarea and inputs(type text, number, checkbox, radio)
- * @Link https://github.com/brewcold/util/blob/main/react/src/use-form/README.md
- * @example
- * function Form() {
- *  const initialValues = { email: '', content: '', ok: false }
- *  const onSubmit = fetch(...)
- *  const { values, submit, handleChange } = useForm({ initialValues, onSubmit })
- *
- *  return (
- *    <form onSubmit={submit}>
- *      <input name="email" value={values.email} onChange={handleChange} />
- *      <button>SUBMIT</button>
- *    </form>
- *  )
- * }
- */
 export const useForm = <T extends Object>({
   initialValues,
   onSubmit,
@@ -31,14 +12,17 @@ export const useForm = <T extends Object>({
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [response, setResponse] = useState<unknown>(null)
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const t = e.target as HTMLInputElement | HTMLTextAreaElement
-    if (t instanceof HTMLInputElement && (t.type === 'checkbox' || t.type === 'radio')) {
-      setValues(prevData => ({ ...prevData, [t.name]: t.checked }))
-    } else {
-      setValues(prevData => ({ ...prevData, [t.name]: t.value }))
-    }
-  }
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const t = e.target
+      if (t instanceof HTMLInputElement && (t.type === 'checkbox' || t.type === 'radio')) {
+        setValues(prevData => ({ ...prevData, [t.name]: t.checked }))
+      } else {
+        setValues(prevData => ({ ...prevData, [t.name]: t.value }))
+      }
+    },
+    [values]
+  )
 
   const [currRefValues, refs] = useRefInputInit<T>(refInputNames, values)
 
@@ -47,7 +31,7 @@ export const useForm = <T extends Object>({
     else setValues({ ...values, ...convertedRefValues })
   }
 
-  const submit = () => setIsLoading(true)
+  const submit = () => useCallback(() => setIsLoading(true), [])
 
   useEffect(() => {
     if (isLoading) mergeValues(values, currRefValues())
@@ -60,45 +44,44 @@ export const useForm = <T extends Object>({
       setResponse(res)
       setIsLoading(false)
     }
-
     if (isLoading && valid) POST()
   }, [isLoading, valid])
 
-  const data = {
-    values,
-    setValues,
-    handleChange,
-    refs,
-    refValues: currRefValues(),
-    submit,
-    isLoading,
-    response
-  }
+  const data = useMemo(() => {
+    return {
+      values,
+      setValues,
+      handleChange,
+      refs,
+      refValues: currRefValues(),
+      submit,
+      isLoading,
+      response
+    }
+  }, [values, handleChange, refs, currRefValues, isLoading, response])
 
   return data
 }
-
 function useRefInputInit<T>(
   refInputNames: (keyof T)[] = [],
   values: T
 ): [
   () => Record<(typeof refInputNames)[number], any>,
-  Record<(typeof refInputNames)[number], RefObject<HTMLInputElement | HTMLTextAreaElement>>
+  Record<(typeof refInputNames)[number], RefObject<HTMLInputElement & HTMLTextAreaElement>>
 ] {
   type Refs = Record<
     (typeof refInputNames)[number],
-    RefObject<HTMLInputElement | HTMLTextAreaElement>
+    RefObject<HTMLInputElement & HTMLTextAreaElement>
   >
   type RefValues = Record<(typeof refInputNames)[number], any>
 
   const refs: Refs = {} as Refs
-  refInputNames.forEach(k => (refs[k] = useRef<HTMLInputElement | HTMLTextAreaElement>(null)))
+  refInputNames.forEach(k => (refs[k] = useRef<HTMLInputElement & HTMLTextAreaElement>(null)))
 
-  const currRefValues: () => RefValues = () => {
+  const currRefValues: () => RefValues = useCallback(() => {
     const refValues: RefValues = values
     refInputNames.forEach(k => (refValues[k] = refs[k]?.current?.value || values[k]))
     return refValues
-  }
-
+  }, [])
   return [currRefValues, refs]
 }
