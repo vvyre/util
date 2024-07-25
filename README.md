@@ -31,11 +31,11 @@ Javascript/Typescript Utility Package for Practice
 - If `initialState` is not provided as an argument, the default state value is set to **false**.
 - [DOCS](https://github.com/brewcold/util/blob/main/react/src/use-boolean-state/README.md)
 
-### `useClipboard`
+### `useTextCopy`
 
-- A React hook for copying something (now only providing **plain text**) to clipboard
+- A React hook for copying plain text to clipboard
 - other types will be provided later
-- example: `const { copy, isCopied, restoreState } = useClipboard(type, duration, onError)`
+- example: `const [ copy, isCopied, restoreState ] = useTextCopy(duration, onError)`
 - **works only in localhost or https**
 - [DOCS](https://github.com/brewcold/util/blob/main/react/src/use-clipboard/README.md)
 
