@@ -11,6 +11,11 @@ Javascript/Typescript Utility Package for Practice
 - A React hook for using Modal easily
 - [DOCS](https://github.com/brewcold/util/blob/main/react/src/use-modal/README.md)
 
+### `useForceRender`
+
+- A React hook for forcibly rendering a component
+- [DOCS](https://github.com/brewcold/util/blob/main/react/src/use-force-render/README.md)
+
 ### `useForm (beta)`
 
 - A React hook for using form easily
