@@ -85,16 +85,14 @@ describe('Component Bindings', () => {
     const nameInput = screen.getByPlaceholderText('name')
     const emailInput = screen.getByPlaceholderText('email')
 
-    waitFor(() => {
-      expect(result.current.values.name).toBe('name')
-      expect(result.current.values.email).toBe('abcd@email.com')
-    })
+    expect(result.current.values.name).toBe('name')
+    expect(result.current.values.email).toBe('abcd@email.com')
 
     fireEvent.change(nameInput, { target: { value: 'hello' } })
-    waitFor(() => expect(result.current.values.name).toBe('hello'))
+    expect(result.current.values.name).toBe('hello')
 
     fireEvent.change(emailInput, { target: { value: 'changed@changed.com' } })
-    waitFor(() => expect(result.current.values.email).toBe('changed@changed.com'))
+    expect(result.current.values.email).toBe('changed@changed.com')
   })
 
   it('should correctly track values of uncontrolled inputs', () => {
@@ -130,7 +128,7 @@ describe('Component Bindings', () => {
     expect(result.current.values.nickname).toBe('latte')
 
     fireEvent.change(refInput, { target: { value: 'brewcoldblue' } })
-    waitFor(() => expect(result.current.values.nickname).toBe('brewcoldblue'))
+    expect(result.current.values.nickname).toBe('brewcoldblue')
   })
 
   it("refValues API should correctly track uncontrolled inputs' values", () => {
@@ -166,7 +164,7 @@ describe('Component Bindings', () => {
     expect(result.current.refValues.nickname).toBe('latte')
 
     fireEvent.change(refInput, { target: { value: 'brewcoldblue' } })
-    waitFor(() => expect(result.current.refValues.nickname).toBe('brewcoldblue'))
+    expect(result.current.refValues.nickname).toBe('brewcoldblue')
   })
 })
 
