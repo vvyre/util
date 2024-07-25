@@ -31,7 +31,7 @@ export const useForm = <T extends Object>({
     else setValues({ ...values, ...convertedRefValues })
   }
 
-  const submit = () => useCallback(() => setIsLoading(true), [])
+  const submit = useCallback(() => setIsLoading(true), [])
 
   useEffect(() => {
     if (isLoading) mergeValues(values, currRefValues())
