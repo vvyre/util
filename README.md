@@ -2,6 +2,24 @@
 
 Javascript/Typescript Utility Package for Practice
 
+## TS
+
+`import {...} from '@syyu/util'`
+
+### `objectKeys`, `objectEntries`
+
+- Object.keys and Object.Entries with type assertion
+
+### `isEmpty`
+
+- A utility function for checking if a value is empty or not
+- empty values are: `'', [], {}, null, undefined, EMPTY[], EMPTY{}`
+- e.g. `isEmpty({a: ''}) //true`
+
+### `noop`
+
+- function that does nothing (`() => {}`)
+
 ## REACT
 
 `import {...} from '@syyu/util/react'`
