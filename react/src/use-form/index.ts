@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { ChangeEvent, RefObject } from 'react'
 import type { UseForm, UseFormArgs } from './types'
-export const useForm = <T extends Object>({
+export const useForm = <T extends Record<string, any>>({
   initialValues,
   onSubmit,
   validator,
@@ -12,17 +12,14 @@ export const useForm = <T extends Object>({
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [response, setResponse] = useState<unknown>(null)
 
-  const handleChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      const t = e.target
-      if (t instanceof HTMLInputElement && (t.type === 'checkbox' || t.type === 'radio')) {
-        setValues(prevData => ({ ...prevData, [t.name]: t.checked }))
-      } else {
-        setValues(prevData => ({ ...prevData, [t.name]: t.value }))
-      }
-    },
-    [values]
-  )
+  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const t = e.target
+    if (t instanceof HTMLInputElement && (t.type === 'checkbox' || t.type === 'radio')) {
+      setValues(prevData => ({ ...prevData, [t.name]: t.checked }))
+    } else {
+      setValues(prevData => ({ ...prevData, [t.name]: t.value }))
+    }
+  }, [])
 
   const [currRefValues, refs] = useRefInputInit<T>(refInputNames, values)
 
@@ -62,26 +59,25 @@ export const useForm = <T extends Object>({
 
   return data
 }
-function useRefInputInit<T>(
-  refInputNames: (keyof T)[] = [],
+
+function useRefInputInit<T extends Record<string, any>>(
+  refInputNames: string[] = [],
   values: T
-): [
-  () => Record<(typeof refInputNames)[number], any>,
-  Record<(typeof refInputNames)[number], RefObject<HTMLInputElement & HTMLTextAreaElement>>
-] {
-  type Refs = Record<
-    (typeof refInputNames)[number],
-    RefObject<HTMLInputElement & HTMLTextAreaElement>
-  >
-  type RefValues = Record<(typeof refInputNames)[number], any>
+): [() => Record<keyof T, any>, Record<string, RefObject<HTMLInputElement | HTMLTextAreaElement>>] {
+  const refs: Record<string, RefObject<HTMLInputElement | HTMLTextAreaElement>> = {}
+  refInputNames.forEach(k => (refs[k] = useRef<HTMLInputElement | HTMLTextAreaElement>(null)))
 
-  const refs: Refs = {} as Refs
-  refInputNames.forEach(k => (refs[k] = useRef<HTMLInputElement & HTMLTextAreaElement>(null)))
+  const currRefValues = useCallback(() => {
+    let refValues: Record<keyof T, any> = { ...values }
+    if (refInputNames.length) return refValues
 
-  const currRefValues: () => RefValues = useCallback(() => {
-    const refValues: RefValues = values
-    refInputNames.forEach(k => (refValues[k] = refs[k]?.current?.value || values[k]))
+    const newValues = new Map()
+    refInputNames.forEach(k => {
+      newValues.set([k], refs[k]?.current?.value || values[k])
+    })
+    refValues = Object.fromEntries(newValues)
     return refValues
-  }, [])
+  }, [values, refs, refInputNames])
+
   return [currRefValues, refs]
 }
