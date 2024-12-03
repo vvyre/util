@@ -6,17 +6,19 @@ Javascript/Typescript Utility Package for Practice
 
 `import {...} from '@syyu/util'`
 
-### `objectKeys`, `objectEntries`
+### `isServer()`, `isClient()`
+
+### `objectKeys()`, `objectEntries()`
 
 - Object.keys and Object.Entries with type assertion
 
-### `isEmpty`
+### `isEmpty()`
 
 - A utility function for checking if a value is empty or not
 - empty values are: `'', [], {}, null, undefined, EMPTY[], EMPTY{}`
 - e.g. `isEmpty({a: ''}) //true`
 
-### `noop`
+### `noop()`, `asyncNoop()`
 
 - function that does nothing (`() => {}`)
 
@@ -67,3 +69,9 @@ Javascript/Typescript Utility Package for Practice
 - A React hook for using conditional render easily
 - useful in triggering animation with (un)mounting component
 - [DOCS](https://github.com/brewcold/util/blob/main/react/src/use-conditional-render/README.md)
+
+# useIsomorphicLayoutEffect
+
+- In an SSR environment, useEffect should be used, while on the client side, useLayoutEffect should be utilized.
+- helps prevent hydration errors
+- [DOCS](https://github.com/brewcold/util/blob/main/react/src/use-isomorphic-layout-effect/README.md))
