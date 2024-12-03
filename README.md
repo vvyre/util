@@ -70,7 +70,7 @@ Javascript/Typescript Utility Package for Practice
 - useful in triggering animation with (un)mounting component
 - [DOCS](https://github.com/brewcold/util/blob/main/react/src/use-conditional-render/README.md)
 
-# useIsomorphicLayoutEffect
+### `useIsomorphicLayoutEffect`
 
 - In an SSR environment, useEffect should be used, while on the client side, useLayoutEffect should be utilized.
 - helps prevent hydration errors
