@@ -1,0 +1,11 @@
+{
+  "name": "@syyu/use-isomorphic-layout-effect",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "bunchee"
+  },
+  "peerDependencies": {
+    "react": "*"
+  }
+}
