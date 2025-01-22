@@ -9,7 +9,7 @@
 export function Congrats({data}) {
 
  //returns random int between 0 <= X < 10
- const num = useRandomNumber([0, 10], [data.id], 'int')
+ const num = useRandomNumber([0, 10], 'int')
 
  return (
   <div>{num < 5 ? "congrats!" : "It's a waste!"}</div>
@@ -19,9 +19,8 @@ export function Congrats({data}) {
 
 ## useModal
 
-- example: `const num = useRandomNumber([0, 10], deps, 'int')`
-- when third parameter is `'undefined'`, default value is `'number'`
+- example: `const num = useRandomNumber([0, 10], 'int')`
 
 ## returns
 
-- `num`: number
+- `num`: random number (React State)
