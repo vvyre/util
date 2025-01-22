@@ -22,7 +22,7 @@ Javascript/Typescript Utility Package for Practice
 
 - function that does nothing (`() => {}`)
 
-### `getRandomNumber()`, `getRandomInt()`
+### `getRandomNumber()`, `getRandomInt()`,
 
 - function that helps to get random number easily
 - e.g. `const num = getRandomNumber([3,6], 'int') //returns int between 3 <= N < 6`
@@ -81,7 +81,7 @@ Javascript/Typescript Utility Package for Practice
 - helps prevent hydration errors
 - [DOCS](https://github.com/brewcold/util/blob/main/react/src/use-isomorphic-layout-effect/README.md)
 
-### `useRandomNumber`
+### `Number Hooks`
 
-- React hook for using random number with range easily
+- React hooks for using numbers easily
 - [DOCS](https://github.com/brewcold/util/blob/main/react/src/use-numbers/README.md)
