@@ -23,7 +23,7 @@
     "coverage": "pnpx jest --coverage",
     "build": "pnpm build-package ts && pnpm build-package react",
     "build-package": "bunchee --cwd",
-    "publish": "npm publish"
+    "release": "npm publish"
   },
   "exports": {
     ".": {
@@ -100,8 +100,5 @@
     "singleQuote": true,
     "arrowParens": "avoid",
     "trailingComma": "none"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
   }
 }
